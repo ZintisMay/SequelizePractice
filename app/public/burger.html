@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Star Wars - Express</title>
+	<!-- Latest compiled and minified CSS & JS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+	<style type="text/css">
+	#burgerdump{float:left;width:50%;}
+	#burgerdump2{float:right;width:50%;}
+
+	</style>
+
+</head>
+<body>
+	
+	<div class="container">
+		<div class="jumbotron">
+			<h1>EatDaBurger2</h1>
+			
+		</div>
+
+		<div class="row">
+
+			<div class="col-lg-12">
+
+				<div class="panel panel-default">
+
+					<div class="panel-heading">
+
+						<h3 class="panel-title"><strong>Add Burger</strong></h3>
+
+					</div>
+
+					<div class="panel-body">
+
+						<form action="" method="POST" role="form">
+						
+							<div class="form-group">
+								<label for="">Name:</label>
+								<input type="text" class="form-control" id="name" placeholder="">
+							</div>
+
+						</form>
+
+						<br>
+
+						<div class="text-right">
+							<button type="submit" class="btn btn-primary btn-md" id="addBtn"></span><span class="glyphicon glyphicon-fire"></span>Add to Menu</button>
+						</div>
+
+
+					</div>
+
+				</div>
+
+			</div>			
+		</div>
+	</div>
+<hr>
+	<div class="container">
+		
+		<div class="row">
+
+			<div class="col-lg-12">
+
+				<div class="panel panel-default">
+
+					<div class="panel-heading">
+
+						<h3 class="panel-title"><strong>Burgers</strong></h3>
+
+					</div>
+
+					<div class="panel-body" id="burgerdump">
+						
+					</div>
+
+					<div class="panel-body" id="burgerdump2">
+						
+					</div>
+
+				</div>
+			</div>			
+		</div>
+	</div>
+
+
+	<script type="text/javascript">
+		
+//this makes a new burger, makes an object with just the name, passes it into an api post
+	$(addBtn).on("click", function(){
+
+		var newBurger = 
+		{
+			name: $("#name").val().trim(),
+		};
+
+		var currentURL = window.location.origin;
+
+		$.post( currentURL + "/api/new", newBurger)
+			.done(function(data){
+				console.log(data);
+				//begin in here doesn't seem to matter
+				// begin();
+			});
+
+		$('#name').val("");
+
+		begin();
+
+		return false;
+
+	});	
+
+//this looks for the dynamic devour buttons and takes the data-type from them to find the database burger by id and make it's "devoured" field true
+	$(document).on('click', '.devourme', function(){
+
+		var idNo = {
+			id: $(this).data('id')
+		}
+
+		console.log(idNo);
+
+		var currentURL = window.location.origin;
+
+		$.post( currentURL + "/api/change", idNo)
+			.done(function(data){
+				console.log(data);
+				begin();
+		});
+
+
+	});
+
+
+//opening function, .get then populates for each returned object
+	function begin(){
+		//clears both fields
+		$("#burgerdump").empty();
+		$("#burgerdump2").empty();
+
+		var currentURL = window.location.origin;
+
+		$.get(currentURL + "/api", function(data){
+			console.log(data);
+			makeall(data);
+		});
+		
+	}
+
+//running this as a separate function
+	function makeall(data){
+			for (x=0; x<data.length;x++){
+				populate(data[x]);
+			}
+	}
+
+//appends to #burgerdump field
+	function populate(object){
+
+		var temp = '<div class="well float-right">';
+
+		//makes a button
+		var button = '<button class="devourme" style="float:right;" data-id="' + object.id + '">Eat Me</button>'
+
+		//assembles an element from the names
+		if (object){
+			temp+='<h2>' + object.name + '</h2>';
+		} else {
+			temp+='<h2>Nothing was found</h2>';
+		}
+
+		//checks of right or left column
+		if (object.devoured == true){
+
+			temp+='<h4>Has been devoured</h4>';
+			temp+='</div>';
+			$("#burgerdump2").append(temp)
+
+		} else if (object.devoured == false) {
+
+			temp+=button;
+			temp+='<h4>Is still on the grill</h4>';
+			temp+='</div>';
+			$("#burgerdump").append(temp)
+
+		}
+
+		// temp+='</div>';
+
+	}
+
+//initial populate
+		begin();
+
+	</script>
+
+</body>
+</html>

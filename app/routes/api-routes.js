@@ -4,57 +4,74 @@
 
 // Dependencies
 // =============================================================
-var Character 	= require("../model/character.js"); // Pulls out the Character Model
+var Burger 	= require("../model/burger.js"); // Pulls out the burger Model
 
 // Routes
 // =============================================================
 module.exports = function(app){
 
-	// Search for Specific Character (or all characters) then provides JSON
-	app.get('/api/:characters?', function(req, res){
+	app.get('/api/:burgers?', function(req, res){
 
-		// If the user provides a specific character in the URL...
-		if(req.params.characters){
+		console.log("api/burgers?");
 
-			// Then display the JSON for ONLY that character.
-			// (Note how we're using the ORM here to run our searches)
-			Character.findAll({
+		if(req.params.burgers){
+			console.log("req.params.burgers");
+			Burger.findAll({
 				where: {
-					routeName: req.params.characters
+					name: req.params.burgers
 				}
 			}).then(function(result){
 				res.json(result);
-			})
+			});
+		}else{
+			console.log("else");
+			Burger.findAll({}).then(function(result){
+				res.json(result);
+			});
 		}
-
-		// Otherwise...
-		else{
-			// Otherwise display the data for all of the characters. 
-			// (Note how we're using Sequelize here to run our searches)
-				Character.findAll({})
-					.then(function(result){
-						res.json(result);
-				})
-			};
-
 	});
 
-	// If a user sends data to add a new character...
+	app.post('/api/change', function(req, res){
+
+
+		var burger = req.body;
+		console.log("api/change?");
+		console.log(req.body);
+
+		console.log("change else");
+		Burger.update({devoured: true},{
+			where: {
+				id: burger.id
+			}
+		}).then(function(result){
+			console.log(result);
+				res.json(result);
+		});
+	});
+
 	app.post('/api/new', function(req, res){
 
-		// Take the request...
-		var character = req.body;
+		var burger = req.body;
 
-		// Create a routeName 
-		var routeName = character.name.replace(/\s+/g, '').toLowerCase();
+		console.log(req.body);
+		console.log(burger);
 
-		// Then add the character to the database using sequelize
-		Character.create({
-			name: character.name,
-			role: character.role,
-			age: character.age,
-			forcePoints: character.forcePoints
+		Burger.create({
+			name: burger.name,
+			devoured: false,
+
 		});
 		
-	})
+	});
+
+	// app.post('/api/update/:burgers', function(req, res){
+
+	// 	var burger = req.body;
+
+	// 	Burger.create({
+	// 		name: burger.name,
+	// 		devoured: false,
+	// 	});
+		
+	// });
 }

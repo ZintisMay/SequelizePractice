@@ -16,13 +16,7 @@ var Burger = sequelize.define("burger", {
 		autoIncrement: true,
 		primaryKey: true
 	},
-	routeName: {
-		type: Sequelize.STRING,
-	},
 	name: {
-		type: Sequelize.STRING,
-	},
-	toppings: {
 		type: Sequelize.STRING,
 	},
 	devoured: {
