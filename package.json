@@ -1,19 +1,27 @@
 {
-  "name": "starwars-express",
+  "name": "wk15",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
-  "dependencies": {
-    "body-parser": "^1.15.0",
-    "express": "^4.13.4",
-    "mysql": "^2.10.2",
-    "sequelize": "^3.23.0"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZintisMay/wk15.git"
+  },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZintisMay/wk15/issues"
+  },
+  "homepage": "https://github.com/ZintisMay/wk15#readme",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "mysql": "^2.10.2",
+    "path": "^0.12.7",
+    "sequelize": "^3.23.1"
+  }
 }
